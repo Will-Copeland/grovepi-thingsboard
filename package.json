@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --ext .ts"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,15 @@
   "bugs": {
     "url": "https://github.com/Will-Copeland/grovepi-thingsboard-client/issues"
   },
-  "homepage": "https://github.com/Will-Copeland/grovepi-thingsboard-client#readme"
+  "homepage": "https://github.com/Will-Copeland/grovepi-thingsboard-client#readme",
+  "dependencies": {
+    "async-mqtt": "^2.5.0",
+    "mqtt": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^13.13.1",
+    "@typescript-eslint/eslint-plugin": "^2.29.0",
+    "@typescript-eslint/parser": "^2.29.0",
+    "eslint": "^6.8.0"
+  }
 }
