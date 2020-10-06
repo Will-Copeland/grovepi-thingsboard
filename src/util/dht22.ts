@@ -2,8 +2,6 @@ import { spawnSync } from "child_process";
 import { TransmitterConfig } from "./transmitter";
 import { Packet } from "mqtt";
 import { DeviceConfig, Device } from "./device";
-import fs from "fs";
-import path from "path";
 
 export interface DHT22Interface {
   onMessage: (topic: string, payload: Buffer, packet: Packet) => void;
@@ -15,12 +13,13 @@ class DHT22 extends Device {
   constructor(deviceConfig: DeviceConfig, transmitterConfig: TransmitterConfig) {
     super(deviceConfig, transmitterConfig);
 
-
+    const fiveMin = 300000;
+    const tenSeconds = 10000;
     this.client.on("message", this.onMessage);
 
     this.client.on("connect", () => {
       this.read();
-      setInterval(this.read, 300000) // 5 min
+      setInterval(() => this.read(), tenSeconds) // 5 min
     })
   }
   public interval!: NodeJS.Immediate;
