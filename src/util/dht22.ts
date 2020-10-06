@@ -16,9 +16,9 @@ class DHT22 extends Device {
 
     this.client.on("message", this.onMessage);
 
-    this.interval = setInterval(this.read, 10000);
+    this.interval = setImmediate(this.read);
   }
-  public interval: NodeJS.Timeout;
+  public interval: NodeJS.Immediate;
 
   onMessage(topic: string, payload: Buffer): void {
     console.log("Incoming message for ", topic, "payload: ", payload);
@@ -44,7 +44,10 @@ class DHT22 extends Device {
         return (Str as unknown as number) * 1;
       });
 
+      process.stderr.on("data", (er) => {
+        console.log("ERROROROROROR: ", er);
 
+      })
       console.log("attempting to send...", temp, humidity);
 
       this.send("v1/devices/me/telemetry", { temp, humidity }, err => {
