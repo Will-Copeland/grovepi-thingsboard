@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .ts",
-    "build": "tsc",
-    "start": "tsc && cd ./dist && node index.js"
+    "build": "tsc &&  cp -r ./src/Python/readTemp.py ./dist/thingsboard-device-couplings",
+    "start": "tsc && cd ./dist && cp -r ./src/Python/readTemp.py ./dist/thingsboard-device-couplings && node index.js"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/Will-Copeland/grovepi-thingsboard-client#readme",
   "dependencies": {
-    "async-mqtt": "^2.5.0",
     "mqtt": "^3.0.0",
     "typescript": "^3.8.3"
   },
