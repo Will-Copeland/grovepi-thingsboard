@@ -47,7 +47,9 @@ class DHT22 extends Device {
 
    console.log("STDOUT: ", process.stdout);
 
-      const str = process.stdout.toString();
+      const str = process.stderr.toString();
+      console.log("err: ", str);
+
       const arr = str.split(" ");
       console.log("n", str);
 
