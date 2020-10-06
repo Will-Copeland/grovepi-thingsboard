@@ -1,6 +1,6 @@
 // import MqttHandler from "./util/mqttHandler";
 // import apiKey from "./util/apiKey";
-import transmitter, { DeviceTransmitter, TransmitterConfig } from "./util/transmitter";
+import { TransmitterConfig } from "./util/transmitter";
 import fs from "fs";
 import DHT22 from "./util/dht22";
 import { DeviceConfig } from "./util/device";
@@ -38,10 +38,10 @@ function main(): void {
   }
 
   config.devices.map((deviceConfig) => {
-
     const device = new deviceMap[deviceConfig["type"]](deviceConfig);
     activeDevices = {...activeDevices, [deviceConfig.type]: device};
-  })
+  });
+
 }
 
 main();
