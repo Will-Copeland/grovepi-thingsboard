@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .ts",
     "build": "tsc &&  cp -r ./src/Python/readTemp.py ./dist/thingsboard-device-couplings",
-    "start": "tsc && cd ./dist && cp -r ./src/Python/readTemp.py ./dist/thingsboard-device-couplings && node index.js"
+    "start": "tsc && cp -r ./src/Python/readTemp.py ./dist/thingsboard-device-couplings && cd ./dist && node index.js"
   },
   "repository": {
     "type": "git",
