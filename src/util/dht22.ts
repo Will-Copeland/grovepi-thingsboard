@@ -46,6 +46,18 @@ class DHT22 extends Device {
     console.log("child process started: ", process);
 
    console.log("STDOUT: ", process.stdout);
+
+      const str = process.stdout.toString();
+      const arr = str.split(" ");
+      console.log("n", str);
+
+      const [temp, humidity] = arr.map((d: string) => {
+        const Str = d.replace("\n", "");
+        return (Str as unknown as number) * 1;
+      });
+
+      console.log("Temp, hum?: ", temp, humidity);
+
     // process.on("exit", (code) => {
     //   console.log("Process disconnected", code);
     // })
