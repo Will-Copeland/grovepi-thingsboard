@@ -16,7 +16,7 @@ class DHT22 extends Device {
 
     this.client.on("message", this.onMessage);
 
-    this.interval = setImmediate(this.read);
+    this.interval = setImmediate(this.testMessage);
   }
   public interval: NodeJS.Immediate;
 
@@ -24,6 +24,17 @@ class DHT22 extends Device {
     console.log("Incoming message for ", topic, "payload: ", payload);
 
     this.read();
+  }
+
+
+  testMessage(): void {
+    this.send("v1/devices/me/telemetry", { temp:"33", humidity: "14" }, err => {
+      if (err) {
+        console.log(`Error sending ${this.deviceConfig.id}`);
+      } else {
+        console.log("Successfully sent temp and hum update");
+      }
+    });
   }
 
   read(): void {
