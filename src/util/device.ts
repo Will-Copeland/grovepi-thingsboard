@@ -9,7 +9,7 @@ export interface DeviceConfig {
 
 class Device extends DeviceTransmitter {
   constructor(deviceConfig: DeviceConfig, transmitterConfig: TransmitterConfig) {
-    super(transmitterConfig);
+    super(transmitterConfig, deviceConfig);
     this.deviceConfig = deviceConfig;
   }
   public deviceConfig: DeviceConfig

@@ -1,4 +1,5 @@
 import mqtt, { MqttClient } from "mqtt";
+import { DeviceConfig } from "./device";
 
 export interface Transmitter {
   connect: (config: TransmitterConfig, cb: () => void) => void;
@@ -9,22 +10,19 @@ export interface Transmitter {
 export interface TransmitterConfig {
     host: string;
     port: string;
-    broker?: string;
-    username: string;
-    password: string;
 }
 
 
 class DeviceTransmitter {
-  constructor(transmitterConfig: TransmitterConfig) {
-    const connectOptions = transmitterConfig;
+  constructor(transmitterConfig: TransmitterConfig, deviceConfig: DeviceConfig) {
+    const connectOptions = {...transmitterConfig, username: deviceConfig.accessToken };
     this.transmitterConfig = transmitterConfig;
 
-    console.log(`Trying to connect to the MQTT broker at ${transmitterConfig.broker} on port ${transmitterConfig.port}`);
+    console.log(`Trying to connect to the MQTT broker at ${transmitterConfig.host} on port ${transmitterConfig.port}`);
     this.client = mqtt.connect(connectOptions);
 
     this.client.on('connect', () => {
-      console.log(`Connected successfully to the MQTT broker at ${transmitterConfig.broker} on port ${transmitterConfig.port}`);
+      console.log(`Connected successfully to the MQTT broker at ${transmitterConfig.host} on port ${transmitterConfig.port}`);
       this.client.subscribe("v1/devices/me/rpc/request/+")
     });
 
