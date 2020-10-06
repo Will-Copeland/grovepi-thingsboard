@@ -50,11 +50,9 @@ class DHT22 extends Device {
 
     })
     const process = spawnSync("python", ["/home/pi/grovepi-thingsboard/dist/util/readTemp.py"]);
-    console.log("child process started: ", process);
+    console.log("STDOUT: ", process.stdout.toString());
 
-   console.log("STDOUT: ", process.stdout.toString());
-
-      const str = process.stderr.toString();
+      const str = process.stdout.toString();
       console.log("err: ", str);
 
       const arr = str.split(" ");
@@ -67,44 +65,13 @@ class DHT22 extends Device {
 
       console.log("Temp, hum?: ", temp, humidity);
 
-    // process.on("exit", (code) => {
-    //   console.log("Process disconnected", code);
-    // })
-
-    // process.on("close", (code) => {
-    //   console.log("Process closed: ", code);
-    // });
-
-    // process.on("message", () => {
-    //   console.log("mesaage from process");
-
-    // })
-    // process.stdout.on("data", (data: Buffer) => {
-    //   console.log("data got");
-
-    //   const str = data.toString();
-    //   const arr = str.split(" ");
-    //   console.log("n", str);
-
-    //   const [temp, humidity] = arr.map((d: string) => {
-    //     const Str = d.replace("\n", "");
-    //     return (Str as unknown as number) * 1;
-    //   });
-
-    //   process.stderr.on("data", (er) => {
-    //     console.log("ERROROROROROR: ", er);
-
-    //   })
-    //   console.log("attempting to send...", temp, humidity);
-
-    //   this.send("v1/devices/me/telemetry", { temp, humidity }, err => {
-    //     if (err) {
-    //       console.log(`Error sending ${this.deviceConfig.id}`);
-    //     } else {
-    //       console.log("Successfully sent temp and hum update");
-    //     }
-    //   })
-    // });
+      this.send("v1/devices/me/telemetry", { temp, humidity }, err => {
+        if (err) {
+          console.log(`Error sending ${this.deviceConfig.id}`);
+        } else {
+          console.log("Successfully sent temp and hum update");
+        }
+      })
   }
 }
 
