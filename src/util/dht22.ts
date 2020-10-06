@@ -16,7 +16,7 @@ class DHT22 extends Device {
 
     this.client.on("message", this.onMessage);
 
-    this.interval = setInterval(this.read, 2000);
+    this.interval = setInterval(this.read, 10000);
   }
   public interval: NodeJS.Timeout;
 
