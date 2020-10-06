@@ -1,34 +1,34 @@
-import mqtt from "mqtt";
-import toggleRelay from "../toggleRelay";
-import { DeviceTransmitter } from "./transmitter";
+// import mqtt from "mqtt";
+// import toggleRelay from "../toggleRelay";
+// import { DeviceTransmitter } from "./transmitter";
 
 
-export default {
-  read: function read(ioPort: number, cb: () => void): void {
-    //coming sooon?
-  },
-  set: function set(ioPort: number, state: "on" | "off", cb: (relaySetTo: string) => void): void {
-    toggleRelay(state === "on" ? 1 : 0, ioPort, cb);
-  }
-}
+// export default {
+//   read: function read(ioPort: number, cb: () => void): void {
+//     //coming sooon?
+//   },
+//   set: function set(ioPort: number, state: "on" | "off", cb: (relaySetTo: string) => void): void {
+//     toggleRelay(state === "on" ? 1 : 0, ioPort, cb);
+//   }
+// }
 
 
-class SpdtRelay extends DeviceTransmitter {
-constructor(deviceConfig: unknown) {
-  super(deviceConfig);
-}
+// class SpdtRelay extends DeviceTransmitter {
+// constructor(deviceConfig: unknown) {
+//   super(deviceConfig);
+// }
 
 
-onMessage() {
+// onMessage() {
 
-}
+// }
 
 
-read() {
+// read() {
 
-}
+// }
 
-}
+// }
 
 
 
