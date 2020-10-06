@@ -17,7 +17,7 @@ class DHT22 extends Device {
     this.client.on("message", this.onMessage);
 
     this.client.on("connect", () => {
-      this.interval = setImmediate(this.testMessage);
+      this.read();
     })
   }
   public interval!: NodeJS.Immediate;
