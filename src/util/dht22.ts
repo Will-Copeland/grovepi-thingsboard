@@ -30,7 +30,7 @@ class DHT22 extends Device {
 
 
   testMessage(): void {
-    this.send("v1/devices/me/telemetry", { temp:"33", humidity: "14" }, err => {
+    super.send("v1/devices/me/telemetry", { temp:"33", humidity: "14" }, err => {
       if (err) {
         console.log(`Error sending ${this.deviceConfig.id}`);
       } else {
