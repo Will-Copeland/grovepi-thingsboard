@@ -43,8 +43,20 @@ class DHT22 extends Device {
     console.log("Attempting to read data...");
 
     const process = spawn("python", ["./readTemp.py"]);
-    console.log("child process started");
+    console.log("child process started: ", process);
 
+    process.on("exit", (code) => {
+      console.log("Process disconnected", code);
+    })
+
+    process.on("close", (code) => {
+      console.log("Process closed: ", code);
+    });
+
+    process.on("message", () => {
+      console.log("mesaage from process");
+
+    })
     process.stdout.on("data", (data: Buffer) => {
       console.log("data got");
 
