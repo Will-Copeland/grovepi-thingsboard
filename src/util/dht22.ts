@@ -52,7 +52,7 @@ class DHT22 extends Device {
     const process = spawnSync("python", ["/home/pi/grovepi-thingsboard/dist/util/readTemp.py"]);
     console.log("child process started: ", process);
 
-   console.log("STDOUT: ", process.stdout);
+   console.log("STDOUT: ", process.stdout.toString());
 
       const str = process.stderr.toString();
       console.log("err: ", str);
