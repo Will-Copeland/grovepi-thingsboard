@@ -55,7 +55,6 @@ while True:
         [temp, humidity] = grovepi.dht(sensor, white)
         if math.isnan(temp) == False and math.isnan(humidity) == False:
             sys.stdout.flush()
-            sys.exit()
 
     except IOError:
         print("Error")
