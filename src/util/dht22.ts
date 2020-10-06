@@ -39,10 +39,10 @@ class DHT22 extends Device {
     const str = process.stdout.toString();
     console.log("err: ", str);
 
-    const arr = str.replace("(", "").replace(")", "").replace(/(\r\n|\n|\r)/gm, "").trim().split(",");
+    const arr = str.replace("(", "").replace(")", "").replace(/(\r\n|\n|\r)/gm, "").split(",");
     console.log("Arr", arr);
 
-    const [temp, humidity] = arr;
+    const [temp, humidity] = arr.map(val => val.trim());
 
     console.log("Temp, hum?: ", temp, humidity);
 
