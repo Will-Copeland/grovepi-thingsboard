@@ -1,6 +1,7 @@
 import { spawn } from "child_process";
-import { DeviceTransmitter } from "./transmitter";
+import { TransmitterConfig } from "./transmitter";
 import { Packet } from "mqtt";
+import { DeviceConfig, Device } from "./device";
 
 
 export interface DHT22Interface {
@@ -9,9 +10,9 @@ export interface DHT22Interface {
   send: () => void;
 }
 
-class DHT22 extends DeviceTransmitter {
-  constructor(deviceConfig) {
-    super(deviceConfig);
+class DHT22 extends Device {
+  constructor(deviceConfig: DeviceConfig, transmitterConfig: TransmitterConfig) {
+    super(deviceConfig, transmitterConfig);
 
     this.client.on("message", this.onMessage);
   }
@@ -35,16 +36,15 @@ class DHT22 extends DeviceTransmitter {
       });
 
 
-      this.send("topic", { temp, humidity }, err => {
+      this.send("v1/devices/me/telemetry", { temp, humidity }, err => {
         if (err) {
-          console.log(`Error sending ${deviceConfig.id}`);
+          console.log(`Error sending ${this.deviceConfig.id}`);
         } else {
           console.log("Successfully sent temp and hum update");
 
         }
       })
     });
-
   }
 }
 

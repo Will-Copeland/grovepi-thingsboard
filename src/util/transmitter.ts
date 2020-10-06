@@ -1,5 +1,4 @@
-import mqtt, { MqttClient, OnMessageCallback, Packet } from "mqtt";
-import { DeviceConfig } from "./device";
+import mqtt, { MqttClient } from "mqtt";
 
 export interface Transmitter {
   connect: (config: TransmitterConfig, cb: () => void) => void;
@@ -17,18 +16,8 @@ export interface TransmitterConfig {
 
 
 class DeviceTransmitter {
-  public client: MqttClient;
-
   constructor(transmitterConfig: TransmitterConfig) {
-    const connectOptions = transmitterConfig || {
-      port: "1883",
-      host: config.broker,
-      rejectUnauthorized: false,
-      protocol: 'mqtts',
-      username: config.username,
-      password: config.password,
-    };
-
+    const connectOptions = transmitterConfig;
     this.transmitterConfig = transmitterConfig;
 
     console.log(`Trying to connect to the MQTT broker at ${transmitterConfig.broker} on port ${transmitterConfig.port}`);
@@ -39,12 +28,12 @@ class DeviceTransmitter {
       this.client.subscribe("v1/devices/me/rpc/request/+")
     });
 
-
     this.client.on('error', (err) => {
       console.error(`An error occurred. ${err}`);
     });
   }
 
+  public client: MqttClient;
   public transmitterConfig: TransmitterConfig;
 
   public send(topic: string, message: { [key: string]: string | number}, cb: (err: unknown) => void): void {

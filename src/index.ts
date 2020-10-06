@@ -37,10 +37,18 @@ function main(): void {
     "dht22": DHT22,
   }
 
+  const transmitterConfig = config.transmitterConfig
   config.devices.map((deviceConfig) => {
-    const device = new deviceMap[deviceConfig["type"]](deviceConfig);
+    console.log(`Instantiating ${deviceConfig.type} on port ${deviceConfig.ioPort}...`);
+
+    const device = new deviceMap[deviceConfig["type"]](deviceConfig, transmitterConfig);
+
+    console.log("Device instantiated");
     activeDevices = {...activeDevices, [deviceConfig.type]: device};
   });
+
+
+  console.log("All devices instantiated...");
 
 }
 
