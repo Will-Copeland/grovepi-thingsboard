@@ -1,3 +1,12 @@
 {
-  "port": "neweoew"
+  "transmitterConfig": {
+    "port": "1883",
+    "host": "167.71.127.229"
+  },
+  "devices": [{
+    "id": "9bc9dea0-076d-11eb-9860-f9877662b68a",
+    "accessToken": "UpyCh6RulFUmFEkZak1b",
+    "type": "dht22",
+    "ioPort": 4
+  }]
 }
