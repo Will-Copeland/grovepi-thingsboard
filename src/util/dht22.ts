@@ -1,4 +1,4 @@
-import { spawn } from "child_process";
+import { spawnSync } from "child_process";
 import { TransmitterConfig } from "./transmitter";
 import { Packet } from "mqtt";
 import { DeviceConfig, Device } from "./device";
@@ -42,47 +42,48 @@ class DHT22 extends Device {
   read(): void {
     console.log("Attempting to read data...");
 
-    const process = spawn("python", ["./readTemp.py"]);
+    const process = spawnSync("python", ["./readTemp.py"]);
     console.log("child process started: ", process);
 
-    process.on("exit", (code) => {
-      console.log("Process disconnected", code);
-    })
+   console.log("STDOUT: ", process.stdout);
+    // process.on("exit", (code) => {
+    //   console.log("Process disconnected", code);
+    // })
 
-    process.on("close", (code) => {
-      console.log("Process closed: ", code);
-    });
+    // process.on("close", (code) => {
+    //   console.log("Process closed: ", code);
+    // });
 
-    process.on("message", () => {
-      console.log("mesaage from process");
+    // process.on("message", () => {
+    //   console.log("mesaage from process");
 
-    })
-    process.stdout.on("data", (data: Buffer) => {
-      console.log("data got");
+    // })
+    // process.stdout.on("data", (data: Buffer) => {
+    //   console.log("data got");
 
-      const str = data.toString();
-      const arr = str.split(" ");
-      console.log("n", str);
+    //   const str = data.toString();
+    //   const arr = str.split(" ");
+    //   console.log("n", str);
 
-      const [temp, humidity] = arr.map((d: string) => {
-        const Str = d.replace("\n", "");
-        return (Str as unknown as number) * 1;
-      });
+    //   const [temp, humidity] = arr.map((d: string) => {
+    //     const Str = d.replace("\n", "");
+    //     return (Str as unknown as number) * 1;
+    //   });
 
-      process.stderr.on("data", (er) => {
-        console.log("ERROROROROROR: ", er);
+    //   process.stderr.on("data", (er) => {
+    //     console.log("ERROROROROROR: ", er);
 
-      })
-      console.log("attempting to send...", temp, humidity);
+    //   })
+    //   console.log("attempting to send...", temp, humidity);
 
-      this.send("v1/devices/me/telemetry", { temp, humidity }, err => {
-        if (err) {
-          console.log(`Error sending ${this.deviceConfig.id}`);
-        } else {
-          console.log("Successfully sent temp and hum update");
-        }
-      })
-    });
+    //   this.send("v1/devices/me/telemetry", { temp, humidity }, err => {
+    //     if (err) {
+    //       console.log(`Error sending ${this.deviceConfig.id}`);
+    //     } else {
+    //       console.log("Successfully sent temp and hum update");
+    //     }
+    //   })
+    // });
   }
 }
 
