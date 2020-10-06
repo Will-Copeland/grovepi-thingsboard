@@ -47,15 +47,16 @@ sensor = sys.argv[1]  # The Sensor goes on digital port 4.
 # Grove Base Kit comes with the blue sensor.
 blue = 0    # The Blue colored sensor.
 white = 1   # The White colored sensor.
-
+# print("Python readTemp started")
 while True:
     try:
         # This example uses the blue colored sensor.
         # The first parameter is the port, the second parameter is the type of sensor.
         [temp, humidity] = grovepi.dht(sensor, white)
-        print(temp, humidity);
+        print(temp, humidity)
+        sys.stdout.flush()
+
         if math.isnan(temp) == False and math.isnan(humidity) == False:
-            sys.stdout.flush()
 
     except IOError:
         print("Error")
