@@ -53,6 +53,7 @@ while True:
         # This example uses the blue colored sensor.
         # The first parameter is the port, the second parameter is the type of sensor.
         [temp, humidity] = grovepi.dht(sensor, white)
+        print(temp, humidity);
         if math.isnan(temp) == False and math.isnan(humidity) == False:
             sys.stdout.flush()
 
