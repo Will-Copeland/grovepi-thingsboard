@@ -2,7 +2,8 @@ import { spawnSync } from "child_process";
 import { TransmitterConfig } from "./transmitter";
 import { Packet } from "mqtt";
 import { DeviceConfig, Device } from "./device";
-
+import fs from "fs";
+import path from "path";
 
 export interface DHT22Interface {
   onMessage: (topic: string, payload: Buffer, packet: Packet) => void;
@@ -41,7 +42,13 @@ class DHT22 extends Device {
 
   read(): void {
     console.log("Attempting to read data...");
+    const dir = __dirname;
+    console.log("Dir: ", dir);
 
+    fs.readdir(dir, (er, files) => {
+      console.log(files);
+
+    })
     const process = spawnSync("python", ["./readTemp.py"]);
     console.log("child process started: ", process);
 
