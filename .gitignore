@@ -2,3 +2,4 @@ node_modules/
 apiKeys.*
 dist/
 PythonHolding/
+config.json
