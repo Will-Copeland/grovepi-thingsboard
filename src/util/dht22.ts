@@ -31,8 +31,12 @@ class DHT22 extends Device {
   }
 
   read(): void {
+    console.log("PATH: ", `/home/pi/grovepi-thingsboard/dist/Python/readTemp.py ${this.deviceConfig.ioPort}`);
+
     console.log("Attempting to read data...");
-    const process = spawnSync("python", [`/home/pi/grovepi-thingsboard/dist/Python/readTemp.py ${this.deviceConfig.ioPort}`]);
+    const process = spawnSync("python", [`/home/pi/grovepi-thingsboard/dist/Python/readTemp.py`, `${this.deviceConfig.ioPort}`], {
+      windowsVerbatimArguments: true
+    });
 
     console.log("STDOUT: ", process.stdout.toString());
 
