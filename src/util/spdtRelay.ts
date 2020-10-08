@@ -12,9 +12,9 @@ class SpdtRelay extends Device {
 
     });
 
-    this.client.on("message", this.onMessage);
+    // this.client.on("message", this.onMessage);
 
-    // this.client.on("message", (topic: string, payload: Buffer) => this.onMessage(topic, payload));
+    this.client.on("message", (topic: string, payload: Buffer) => this.onMessage(topic, payload));
   }
 
 
