@@ -39,23 +39,19 @@ class SpdtRelay extends Device {
       const value = message.params;
 
       console.log("action, value: ", action, value);
-
-      if (value === true || false) {
-
-        const parsed = value === true ? 1 : 0;
-        console.log("Setting relay to: ", parsed);
-        toggleRelay(parsed, this.deviceConfig.ioPort, (result) => {
-          const message = { setTo: result };
-          this.send(topic, message, (err) => {
-            if (err) {
-              console.error(`Error sending message ${message} on topic ${topic} to thingsboard: ${err}`);
-            } else {
-              console.log(`Successfully sent ${message} on ${topic} to thingsboard!`);
-            }
-          });
-
+      const parsed = value === true ? 1 : 0;
+      console.log("Setting relay to: ", parsed);
+      toggleRelay(parsed, this.deviceConfig.ioPort, (result) => {
+        const message = { setTo: result };
+        this.send(topic, message, (err) => {
+          if (err) {
+            console.error(`Error sending message ${message} on topic ${topic} to thingsboard: ${err}`);
+          } else {
+            console.log(`Successfully sent ${message} on ${topic} to thingsboard!`);
+          }
         });
-      }
+
+      });
     }
 
   }
