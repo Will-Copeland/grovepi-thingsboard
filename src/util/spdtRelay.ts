@@ -1,4 +1,3 @@
-import toggleRelay from "./toggleRelay";
 import { Device, DeviceConfig } from "./device";
 import { TransmitterConfig } from "./transmitter";
 import { spawnSync } from "child_process";
@@ -23,7 +22,8 @@ class SpdtRelay extends Device {
     console.log("this.deviceConfig: ", this.deviceConfig);
 
     console.log("spdtRelay recieved message");
-    let message: unknown;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let message: any;
     try {
       message = JSON.parse(payload.toString());
       console.log("Payload successfully converted to JSON");
