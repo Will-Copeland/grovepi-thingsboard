@@ -13,10 +13,14 @@ class SpdtRelay extends Device {
     });
 
     this.client.on("message", this.onMessage);
+
+    // this.client.on("message", (topic: string, payload: Buffer) => this.onMessage(topic, payload));
   }
 
 
   onMessage(topic: string, payload: Buffer): void {
+    console.log("this.deviceConfig: ", this.deviceConfig);
+
     console.log("spdtRelay recieved message");
     let message;
     try {
@@ -33,8 +37,8 @@ class SpdtRelay extends Device {
     if (typeof message === "object") {
       const action = message.method;
       const value = message.params;
-      const setValue = message.setValue;
-      console.log("setValue: ", setValue);
+
+      console.log("action, value: ", action, value);
 
       if (value === true || false) {
 
