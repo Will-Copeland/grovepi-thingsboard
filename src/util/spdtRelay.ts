@@ -1,6 +1,7 @@
 import toggleRelay from "./toggleRelay";
 import { Device, DeviceConfig } from "./device";
 import { TransmitterConfig } from "./transmitter";
+import { spawnSync } from "child_process";
 
 class SpdtRelay extends Device {
   constructor(deviceConfig: DeviceConfig, transmitterConfig: TransmitterConfig) {
@@ -22,7 +23,7 @@ class SpdtRelay extends Device {
     console.log("this.deviceConfig: ", this.deviceConfig);
 
     console.log("spdtRelay recieved message");
-    let message;
+    let message: unknown;
     try {
       message = JSON.parse(payload.toString());
       console.log("Payload successfully converted to JSON");
@@ -41,17 +42,25 @@ class SpdtRelay extends Device {
       console.log("action, value: ", action, value);
       const parsed = value === true ? 1 : 0;
       console.log("Setting relay to: ", parsed);
-      toggleRelay(parsed, this.deviceConfig.ioPort, (result) => {
-        const message = { setTo: result };
-        this.send(topic, message, (err) => {
+
+     const process = spawnSync("python", [`/home/pi/grovepi-thingsboard/dist/Python/${parsed === 0 ? "relayOff" : "relayOn"}.py`, `${this.deviceConfig.ioPort}`], {
+        windowsVerbatimArguments: true
+      });
+
+
+      console.log("Relay set: ", process.stdout);
+
+      const replyMessage = { "setTo": `${process.stdout}` };
+
+      console.log("sending return msg...");
+
+        this.send(topic, replyMessage, (err) => {
           if (err) {
-            console.error(`Error sending message ${message} on topic ${topic} to thingsboard: ${err}`);
+            console.error(`Error sending message ${replyMessage} on topic ${topic} to thingsboard: ${err}`);
           } else {
-            console.log(`Successfully sent ${message} on ${topic} to thingsboard!`);
+            console.log(`Successfully sent ${replyMessage} on ${topic} to thingsboard!`);
           }
         });
-
-      });
     }
 
   }
