@@ -1,35 +1,54 @@
-// import mqtt from "mqtt";
-// import toggleRelay from "../toggleRelay";
-// import { DeviceTransmitter } from "./transmitter";
+import toggleRelay from "../toggleRelay";
+import { Device, DeviceConfig } from "./device";
+import { TransmitterConfig } from "./transmitter";
+
+class SpdtRelay extends Device {
+  constructor(deviceConfig: DeviceConfig, transmitterConfig: TransmitterConfig) {
+    super(deviceConfig, transmitterConfig);
+
+    this.client.on("connect", () => {
+      console.log("spdtRelay connected");
+
+    })
+  }
 
 
-// export default {
-//   read: function read(ioPort: number, cb: () => void): void {
-//     //coming sooon?
-//   },
-//   set: function set(ioPort: number, state: "on" | "off", cb: (relaySetTo: string) => void): void {
-//     toggleRelay(state === "on" ? 1 : 0, ioPort, cb);
-//   }
-// }
+  onMessage(topic: string, payload: Buffer): void {
+    console.log("spdtRelay recieved message");
+    let message;
+    try {
+      message = JSON.parse(payload.toString());
+      console.log("Payload successfully converted to JSON");
 
+    } catch (error) {
+      console.error("Payload not JSON, converting to string");
+      message = payload.toString();
+      console.log("Payload converted to string");
+    }
+    console.log(`${topic}: ${message}`);
 
-// class SpdtRelay extends DeviceTransmitter {
-// constructor(deviceConfig: unknown) {
-//   super(deviceConfig);
-// }
+    if (typeof message === "object") {
+      const setValue = message.setValue;
+      if (setValue === 1 || 0) {
+        console.log("Setting relay to: ", setValue);
+        toggleRelay(setValue, this.deviceConfig.ioPort, (result) => {
+          const message = { setTo: result };
+          this.send(topic, message, (err) => {
+            if (err) {
+              console.error(`Error sending message ${message} on topic ${topic} to thingsboard: ${err}`);
+            } else {
+              console.log(`Successfully sent ${message} on ${topic} to thingsboard!`);
+            }
+          });
 
+        });
+      }
+    }
 
-// onMessage() {
+  }
+}
 
-// }
-
-
-// read() {
-
-// }
-
-// }
-
+export { SpdtRelay };
 
 
 
@@ -78,5 +97,3 @@
 //     console.log("ERROR: ", err);
 //   });
 // }
-
-
