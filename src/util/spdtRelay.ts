@@ -1,4 +1,4 @@
-import toggleRelay from "../toggleRelay";
+import toggleRelay from "./toggleRelay";
 import { Device, DeviceConfig } from "./device";
 import { TransmitterConfig } from "./transmitter";
 
