@@ -28,11 +28,14 @@ class SpdtRelay extends Device {
       message = payload.toString();
       console.log("Payload converted to string");
     }
-    console.log(`${topic}: ${message}`);
+    console.log(`${topic}: `, message);
 
     if (typeof message === "object") {
       const setValue = message.setValue;
+      console.log("setValue: ", setValue);
+
       if (setValue === true || false) {
+
         const parsed = setValue === true ? 1 : 0;
         console.log("Setting relay to: ", parsed);
         toggleRelay(parsed, this.deviceConfig.ioPort, (result) => {
