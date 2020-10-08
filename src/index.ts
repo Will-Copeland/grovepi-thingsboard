@@ -4,6 +4,7 @@ import { TransmitterConfig } from "./util/transmitter";
 import fs from "fs";
 import DHT22 from "./util/dht22";
 import { DeviceConfig } from "./util/device";
+import { SpdtRelay } from "./util/spdtRelay";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 
@@ -35,6 +36,7 @@ function main(): void {
 
   const deviceMap = {
     "dht22": DHT22,
+    "spdtRelay": SpdtRelay,
   }
 
   const transmitterConfig = config.transmitterConfig
