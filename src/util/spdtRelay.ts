@@ -6,10 +6,13 @@ class SpdtRelay extends Device {
   constructor(deviceConfig: DeviceConfig, transmitterConfig: TransmitterConfig) {
     super(deviceConfig, transmitterConfig);
 
+
     this.client.on("connect", () => {
       console.log("spdtRelay connected");
 
-    })
+    });
+
+    this.client.on("message", this.onMessage);
   }
 
 
@@ -29,9 +32,10 @@ class SpdtRelay extends Device {
 
     if (typeof message === "object") {
       const setValue = message.setValue;
-      if (setValue === 1 || 0) {
-        console.log("Setting relay to: ", setValue);
-        toggleRelay(setValue, this.deviceConfig.ioPort, (result) => {
+      if (setValue === true || false) {
+        const parsed = setValue === true ? 1 : 0;
+        console.log("Setting relay to: ", parsed);
+        toggleRelay(parsed, this.deviceConfig.ioPort, (result) => {
           const message = { setTo: result };
           this.send(topic, message, (err) => {
             if (err) {
