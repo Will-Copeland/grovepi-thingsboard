@@ -34,7 +34,7 @@ class DeviceTransmitter {
   public client: MqttClient;
   public transmitterConfig: TransmitterConfig;
 
-  public send(topic: string, message: { [key: string]: string | number}, cb: (err: unknown) => void): void {
+  public send(topic: string, message: { [key: string]: string | number | boolean }, cb: (err: unknown) => void): void {
     this.client.publish(topic, JSON.stringify(message), err => {
       if (err) {
         console.error(err);
