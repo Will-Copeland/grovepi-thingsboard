@@ -55,6 +55,8 @@ class SpdtRelay extends Device {
 
 
   onMessage(topic: string, payload: Buffer): void {
+    const requestId = this.getRequestId(topic);
+
     console.log("spdtRelay recieved message");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let message: any;
@@ -80,7 +82,6 @@ class SpdtRelay extends Device {
         this.getValue(topic);
       }
     }
-
   }
 }
 export { SpdtRelay };

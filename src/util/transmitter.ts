@@ -34,6 +34,13 @@ class DeviceTransmitter {
   public client: MqttClient;
   public transmitterConfig: TransmitterConfig;
 
+
+  public getRequestId(topic: string): string | null {
+    const id = topic.split("/").pop();
+    console.log("requestId: ", id);
+    return id || null;
+  }
+
   public send(topic: string, message: { [key: string]: string | number | boolean }, cb: (err: unknown) => void): void {
     this.client.publish(topic, JSON.stringify(message), err => {
       if (err) {
