@@ -9,18 +9,52 @@ class SpdtRelay extends Device {
 
     this.client.on("connect", () => {
       console.log("spdtRelay connected");
-
     });
-
-    // this.client.on("message", this.onMessage);
 
     this.client.on("message", (topic: string, payload: Buffer) => this.onMessage(topic, payload));
   }
 
 
-  onMessage(topic: string, payload: Buffer): void {
-    console.log("this.deviceConfig: ", this.deviceConfig);
+  getValue(topic: string): void {
+    const process = spawnSync("python", [`/home/pi/grovepi-thingsboard/dist/Python/readRelay.py`, `${this.deviceConfig.ioPort}`]);
+    console.log("readRelay result: ", process.stdout);
+    const msg = { params: true };
+    console.log("msg: ", msg);
 
+    this.send(topic, msg, (err: any) => {
+      if (err) {
+        console.error("Error sending read Value: ", err);
+
+      } else {
+        console.log("sent message from getValue: ",);
+
+      }
+    })
+  }
+
+
+  setValue(value: number, topic?: string): void {
+    const process = spawnSync("python", [`/home/pi/grovepi-thingsboard/dist/Python/${value === 0 ? "relayOff" : "relayOn"}.py`, `${this.deviceConfig.ioPort}`]);
+
+    console.log("Relay set: ", process.stdout);
+
+    const replyMessage = { "setTo": `${process.stdout}` };
+
+    if (topic) {
+      console.log("sending return msg...");
+
+      this.send(topic, replyMessage, (err) => {
+        if (err) {
+          console.error(`Error sending message ${replyMessage} on topic ${topic} to thingsboard: ${err}`);
+        } else {
+          console.log(`Successfully sent ${replyMessage} on ${topic} to thingsboard!`);
+        }
+      });
+    }
+  }
+
+
+  onMessage(topic: string, payload: Buffer): void {
     console.log("spdtRelay recieved message");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let message: any;
@@ -33,39 +67,22 @@ class SpdtRelay extends Device {
       message = payload.toString();
       console.log("Payload converted to string");
     }
-    console.log(`${topic}: `, message);
+    console.log(`Topic: ${topic}`);
+    console.log("Message: ", message);
 
     if (typeof message === "object") {
       const action = message.method;
       const value = message.params;
 
-      console.log("action, value: ", action, value);
-      const parsed = value === true ? 1 : 0;
-      console.log("Setting relay to: ", parsed);
-
-     const process = spawnSync("python", [`/home/pi/grovepi-thingsboard/dist/Python/${parsed === 0 ? "relayOff" : "relayOn"}.py`, `${this.deviceConfig.ioPort}`], {
-        windowsVerbatimArguments: true
-      });
-
-
-      console.log("Relay set: ", process.stdout);
-
-      const replyMessage = { "setTo": `${process.stdout}` };
-
-      console.log("sending return msg...");
-
-        this.send(topic, replyMessage, (err) => {
-          if (err) {
-            console.error(`Error sending message ${replyMessage} on topic ${topic} to thingsboard: ${err}`);
-          } else {
-            console.log(`Successfully sent ${replyMessage} on ${topic} to thingsboard!`);
-          }
-        });
+      if (action === "setValue") {
+        this.setValue(value === true ? 1 : 0);
+      } else if (action === "getValue") {
+        this.getValue(topic);
+      }
     }
 
   }
 }
-
 export { SpdtRelay };
 
 
