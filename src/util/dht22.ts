@@ -13,13 +13,14 @@ class DHT22 extends Device {
   constructor(deviceConfig: DeviceConfig, transmitterConfig: TransmitterConfig) {
     super(deviceConfig, transmitterConfig);
 
-    const fiveMin = 300000;
     const tenSeconds = 10000;
+    const fiveMin = 300000;
+    const thirtyMin = fiveMin * 6;
     this.client.on("message", this.onMessage);
 
     this.client.on("connect", () => {
       this.read();
-      setInterval(() => this.read(), tenSeconds) // 5 min
+      setInterval(() => this.read(), thirtyMin);
     })
   }
   public interval!: NodeJS.Immediate;
