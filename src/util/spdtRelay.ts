@@ -21,13 +21,11 @@ class SpdtRelay extends Device {
     const msg = { method: "getValue", params: true };
     console.log("msg: ", msg);
 
-    this.send(topic, msg, (err: any) => {
+    this.send(topic, msg, (err: unknown) => {
       if (err) {
         console.error("Error sending read Value: ", err);
-
       } else {
-        console.log("sent message from getValue: ",);
-
+        console.log("sent message from getValue: ", msg);
       }
     })
   }
