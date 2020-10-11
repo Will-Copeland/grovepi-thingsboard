@@ -18,7 +18,7 @@ class SpdtRelay extends Device {
   getValue(topic: string): void {
     const process = spawnSync("python", [`/home/pi/grovepi-thingsboard/dist/Python/readRelay.py`, `${this.deviceConfig.ioPort}`]);
     console.log("readRelay result: ", process.stdout);
-    const msg = { params: true };
+    const msg = { method: "getValue", params: true };
     console.log("msg: ", msg);
 
     this.send(topic, msg, (err: any) => {
@@ -55,7 +55,6 @@ class SpdtRelay extends Device {
 
 
   onMessage(topic: string, payload: Buffer): void {
-    const requestId = this.getRequestId(topic);
 
     console.log("spdtRelay recieved message");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -79,7 +78,9 @@ class SpdtRelay extends Device {
       if (action === "setValue") {
         this.setValue(value === true ? 1 : 0);
       } else if (action === "getValue") {
-        this.getValue(topic);
+        const requestId = this.getRequestId(topic);
+        const responseTopic = `v1/devices/me/rpc/response/${requestId}`;
+        this.getValue(responseTopic);
       }
     }
   }
